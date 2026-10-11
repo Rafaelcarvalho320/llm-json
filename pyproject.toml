@@ -1,0 +1,62 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "llm-json"
+version = "0.1.0"
+description = "Recover a usable JSON value from what a language model actually sent, and report what had to be repaired."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Rafael Penco de Carvalho", email = "102534725+Rafaelcarvalho320@users.noreply.github.com" }]
+keywords = ["llm", "json", "parsing", "openai", "anthropic", "integration"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Text Processing",
+    "Typing :: Typed",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff>=0.6", "mypy>=1.11"]
+
+[project.urls]
+Homepage = "https://github.com/Rafaelcarvalho320/llm-json"
+Issues = "https://github.com/Rafaelcarvalho320/llm-json/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/llm_json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --strict-markers"
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 88
+src = ["src", "tests"]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.per-file-ignores]
+# RUF001 flags characters that could be confused with their ASCII lookalikes.
+# Handling exactly those characters is what this module and its tests are for,
+# so the literals are deliberate; spelling them as escapes would make the
+# intent harder to read, not easier.
+"src/llm_json/repairs.py" = ["RUF001"]
+"tests/test_repairs.py" = ["RUF001"]
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+files = ["src", "tests", "examples"]
